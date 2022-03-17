@@ -27,7 +27,7 @@ A5 = [25 0 20; 0 1 0; 20 0 41];
 [P4, D4] = eig(A4);
 [P5, D5] = eig(A5);
 
-
+% Do it again
 % TODO - Testing matrix comparison
 bo = isequal(A1*P1, P1*D1)
 
