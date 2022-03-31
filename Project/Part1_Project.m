@@ -11,7 +11,7 @@
 % eigenvectors.
 % Record P and D, and inspect D to be sure the eigenvalues produced by eig 
 % agree with what you calculated by hand in the previous question.
-% Calculate the product AP and P D for each Ai, to verify that AP = P D.
+% Calculate the product AP and P D for each Ai, to verify that AP = PD.
 
 % First we define matrices A1, A2, A3, A4, A5
 A1 = [5 2; 4 3];
