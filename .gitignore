@@ -1,0 +1,2 @@
+# Ignore all autogen asv files in the repo
+*.asv
