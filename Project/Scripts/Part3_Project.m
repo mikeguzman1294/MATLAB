@@ -100,7 +100,7 @@ end
 % population of fish that has been unaffected by the pollution to determine
 % the consequences. Below will be both of the matrices used in this part.
 
-% Declaration as base polluted matrix as a copy of A initially
+% Declaration of base polluted matrix as a copy of A initially
 A_polluted = A;
 
 % Computation of Leslie matrix with pollution
@@ -113,26 +113,30 @@ for i = 2 : 10
      A_polluted(i,i-1) = A_polluted(i,i-1) - 0.15;
 end
 
+% Print Polluted Matrix
+fprintf('Polluted Matrix:\n');
 A_polluted
 
 % Up until 1950,fish population had been free from any environmental effects.
 % In order to get population at the 1950 we simply multiply our original
 % Leslie Matrix that has been raised to the power of 50 and multiplying it
 % by our given starting population as follows:
-C = A^50 * x1;
+population1950_unpolluted = getPopulationYear(1950, A, x1);
 
 % Up until 1990,fish population had been free from any environmental
 % effects.In order to get population at the 1990 we simply multiply our
 % original Leslie Matrix that has been raised to the power of 90 and
 % multiplying it by our given starting population as follows:
-C_1 = A^90 * x1;
+fprintf('1990 population given 90 years without pollution\n');
+population1990_unpolluted = getPopulationYear(1990, A, x1)
 
-%We have our population of fish at the year 1950, we can figure out how
+% We have our population of fish at the year 1950, we can figure out how
 % pollution will affect the fish in forty years.For this we will use the
 % matrix with pollution by raising it to the fortieth power and then
 % multiplying the resulting matrix by the population at the year 1950
 % as follows:
-P = A_polluted^40 * C;
+fprintf('1990 population given 40 years with pollution\n');
+population1990_polluted = (A_polluted^40) * population1950_unpolluted
 
 % Without Pollution(matrix C_1/1900-1990) With Pollution(matrix P), that
 % over a forty year time frame, pollution has been able to collapse in the
@@ -140,9 +144,7 @@ P = A_polluted^40 * C;
 % 4.9*10^12 to 2.09*10^9. The same hit can be seen every other age group.
 
 %Plot showing difference between pollution and without pollution.
-matrix1 = C_1;
-matrix2 = P;
-difference = matrix2-matrix1;
+difference = population1990_polluted - population1990_unpolluted;
 % plot(difference);
 
 % END OF SECTION 2
@@ -159,45 +161,44 @@ difference = matrix2-matrix1;
 % process occured? Please generalize to show a model reflecting any
 % harvesting rate which you may denote by h. Thus above, h = 0.20.
 
+% (b) What does the population now look like for 1930, 1950, 1995, 2000?
+% Is this a good strategy?
+
+% Declaration of the harvesting rate, shall be above h = 0.20
 h = 0.25;
+survival = 1 - h;
 
-% Geting the variables modified after 1925
-year=A.*h;
-year(1,:)=A(1,:);
-year(2,:)=A(2,:);
-year(3,:)=A(3,:);
+% Declaration of harvested matrix as a copy of A initially
+A_harvested = A;
 
-Fishes_Caught=1;
-K=100;
-
-for i=1:K
-A1=A;
-if i>25
-A1=year;
-end
-Fishes_Caught=Fishes_Caught*A1;
-if i==30 || i==50 || i==95 || i==100
-fprintf("\n\n\n\n------------------------\n");
-fprintf("---- Population in %d ----\n",1900+i);
-
-Population_Harvest
-Population_No_Harvest
-
+% Computation to lower each survival rate of fish 3 years or older by h%
+for i = 4 : 10
+     A_harvested(i,i-1) = A_harvested(i,i-1) * survival;
 end
 
-Population_Harvest=Fishes_Caught*x(:,1);
-Population_No_Harvest=A^i*x(:,1);
-Year_Population_Harvest(K)=1900+K;
-Year_Population_Harvest(K)=Population_Harvest(1);
-Year_Population_No_Harvest(K)=Population_No_Harvest(1);
+% Print Harvested Matrix
+fprintf('Harvested Matrix:\n');
+A_harvested
 
+% Computation of population vector until 1925, which is the year in which
+% the survival rate will be affected
+population1925_unaffected = getPopulationYear(1925, A, x1);
+
+% Analysis of the harvested population for every 5 years from 1930 until
+% year 2000. Each vector will be printed in console.
+for year = 1930 : 10 : 2000    
+    k = year - 1925;
+    fprintf('Vector for year %d.\n', year);
+    population_harvested = (A_harvested^k) * population1925_unaffected    
 end
 
-
-
+% END OF SECTION 3
+% -------------------------------------------------------------------------
 
 % FUNCTION DEFINITION SECTION
 
+% Function that calculates population matrix given a year
+% It assumes unpolluted and unharvested conditions
 function x = getPopulationYear(year, A, x1)
     k = year - 1900;
     x = (A^k) * x1;    
