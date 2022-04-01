@@ -90,16 +90,6 @@ end
 % What effect does this have on the population in 1990 as compared to
 % having no pollution effects?
 
-% ANALYSIS OF PROBLEM STATEMENT
-% In part two of Fishing in George’s Bank,we are asked to consider an
-% environmental effect that changes the birth rates and survival rates of
-% our fish population between the years 1950 and 1990. 
-% With the effects of pollution on the fish, their birth rates and survival
-% rates are decreased by 10% and 15% respectively.
-% Once after this data has been collected, we will compare that to the
-% population of fish that has been unaffected by the pollution to determine
-% the consequences. Below will be both of the matrices used in this part.
-
 % Declaration of base polluted matrix as a copy of A initially
 A_polluted = A;
 
@@ -108,7 +98,7 @@ A_polluted = A;
 for i = 3 : 7
     A_polluted(1,i) = A_polluted(1,i) - 0.1;
 end
-% Computation to lower each survival coeficcient by 15%
+% Computation to lower each survival coeficient by 15%
 for i = 2 : 10
      A_polluted(i,i-1) = A_polluted(i,i-1) - 0.15;
 end
@@ -138,11 +128,6 @@ population1990_unpolluted = getPopulationYear(1990, A, x1)
 fprintf('1990 population given 40 years with pollution\n');
 population1990_polluted = (A_polluted^40) * population1950_unpolluted
 
-% Without Pollution(matrix C_1/1900-1990) With Pollution(matrix P), that
-% over a forty year time frame, pollution has been able to collapse in the
-% fish population. Taking the first age group, the numbers reduced from
-% 4.9*10^12 to 2.09*10^9. The same hit can be seen every other age group.
-
 %Plot showing difference between pollution and without pollution.
 difference = population1990_polluted - population1990_unpolluted;
 % plot(difference);
@@ -167,13 +152,14 @@ difference = population1990_polluted - population1990_unpolluted;
 % Declaration of the harvesting rate, shall be above h = 0.20
 h = 0.25;
 survival = 1 - h;
+fprintf('h value = %f\n', h)
 
 % Declaration of harvested matrix as a copy of A initially
 A_harvested = A;
 
 % Computation to lower each survival rate of fish 3 years or older by h%
 for i = 4 : 10
-     A_harvested(i,i-1) = A_harvested(i,i-1) * survival;
+     A_harvested(i,i-1) = A_harvested(i,i-1) - h;
 end
 
 % Print Harvested Matrix
@@ -186,7 +172,7 @@ population1925_unaffected = getPopulationYear(1925, A, x1);
 
 % Analysis of the harvested population for every 5 years from 1930 until
 % year 2000. Each vector will be printed in console.
-for year = 1930 : 10 : 2000    
+for year = 1930 : 5 : 2000    
     k = year - 1925;
     fprintf('Vector for year %d.\n', year);
     population_harvested = (A_harvested^k) * population1925_unaffected    
