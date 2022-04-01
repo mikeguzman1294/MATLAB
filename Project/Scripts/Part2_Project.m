@@ -8,7 +8,7 @@
 
 % PURPOSE
 % To see examples for which the matrix series I+C+C^2+. . .+C^k does
-% converge to (I ? C)^1 and examples for which it does not.
+% converge to (I - C)-1 and examples for which it does not.
 % Let the matrix C given by:
 % 
 %         1   |1 -1  5|
@@ -38,8 +38,23 @@ I = eye(3);
 % Declare matrix S and set it to a starting value of I3
 S = I;
 
-% Series equation definition
-S = I + C * S
+% Series matrix should converge to (I-C)^-1, so it is computed for analysis
+fprintf("Inverse matrix of (I-C):\n");
+inv(I - C)
+
+% Declaration and assignment of 'k' value for the series
+k = 10;
+
+% Print analysis purpose for section
+fprintf("S matrix analysis for each 'k' until k = %d.\n", k);
+
+% Loop for different values of 'k' of the series equation
+% Print matrix S in console each time to analyze matrix convergence
+for i = 1 : k
+    fprintf("Current k value: %d\n", i);
+    % Series equation definition
+    S = I + C * S
+end
 
 % END OF SECTION 1
 % -------------------------------------------------------------------------
@@ -49,8 +64,42 @@ S = I + C * S
 % whether the norm of (I - C)S - I is small. Experiment with different
 % values of k to find how many terms of the series you must use in
 %                  S = I + C + C^2 + . . . + C^k
-% in order to get the norm of (I ? C)S ? I to be 10^?10 or smaller.
+% in order to get the norm of (I - C)S - I to be 10^-10 or smaller.
 
-% Declare a variable to store the norm of (I - C)S - I
-n = norm((I-C) * S - I)
+% Reset matrix S to value of I3
+S = I;
 
+% Re-assignment of 'k' value for the series
+k = 10;
+
+% Initialize an empty row vector of k elements to store norm results
+y = zeros(1,k);
+
+% Print analysis purpose for section
+fprintf("Norm of (I-C)S-I analysis for each 'k' until k = %d.\n", k);
+
+% Loop for different values of 'k' of the series equation
+% Print norm of (I - C)S - I in console each time to analyze its size
+for i = 1 : k
+    fprintf("Current k value: %d\n", i);
+    % Series equation definition
+    S = I + C * S;
+    % Variable to store/print the norm of (I - C)S - I for each k iteration
+    n = norm((I-C) * S - I)
+    % Store each norm value in the y-axis vector for plotting
+    y(1,i) = n;
+end
+
+% Norm of (I-C)S-1 plot Section
+% Create x-axis row vector of k elements
+x = [1:k];
+%Select figure
+figure(1)
+% Display the plot
+plot(x,y,'r')
+title('Norm of (I-C)S-1 for each k')
+xlabel('k')
+ylabel('Norm of (I-C)S-1')
+
+% END OF SECTION 2
+% -------------------------------------------------------------------------
